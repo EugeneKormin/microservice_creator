@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const ideaDescriptionValue = ideaDescription.value;
 
-            fetch('http://172.17.0.3:8000/api/generate-reply', {
+            fetch('/critiq/api/generate-reply', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify({
                     ideaDescription: ideaDescriptionValue
                 }),
-                mode: 'cors',
                 credentials: 'include'
             })
             .then(response => {

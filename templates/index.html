@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Program Generation System</title>
+        <script src="/static/response_script.js"></script>
+    </head>
+    <body>
+        <h1>Submit Your Program Idea</h1>
+        <form id="programIdeaForm">
+            <label for="ideaDescription">Idea Description:</label><br>
+            <textarea id="ideaDescription" name="ideaDescription" rows="4" cols="50"></textarea><br>
+            <input type="submit" value="Submit">
+        </form>
+
+        <h2>Generated Questions</h2>
+        <div id="generatedCodeContainer">
+            <!-- The generated questions will be inserted here by the JavaScript code -->
+        </div>
+
+        <h2>Feedback</h2>
+        <form id="feedbackForm">
+            <label for="feedback">Your Feedback:</label><br>
+            <textarea id="feedback" name="feedback" rows="4" cols="50"></textarea><br>
+            <input type="submit" value="Submit Feedback">
+        </form>
+    </body>
+</html>
