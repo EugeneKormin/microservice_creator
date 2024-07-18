@@ -1,61 +1,51 @@
-# Project Review Simulation
+# Frontend
+A web application for submitting program ideas and generating questions based on those ideas.
 
-## Обзор проекта
+## Project Structure
 
-Этот проект представляет собой систему для симуляции обзора проектов и генерации вопросов на основе описания идеи. Он включает в себя веб-сервер, клиентский скрипт и HTML-шаблон.
+1. Server.py: Flask server that serves the main page and handles API requests.
+2. response_script.js: Client-side JavaScript for form submission and API interaction.
+3. index.html: Main HTML template for the web interface.
+4. Dockerfile: Defines the Docker image for the application.
+5. nginx.conf: Nginx configuration for reverse proxying and routing.
 
-**Важно: Проект находится в активной разработке. Функциональность не гарантируется и может измениться.**
+## Setup and Installation
 
-## Компоненты
+1. Clone the repository and navigate to the project directory.
+2. Install the required Python packages.
+3. Build the Docker image.
+4. Run the Docker container.
 
-### Server.py
+## Usage
 
-Flask-сервер, который отображает главную страницу.
+1. Access the web interface at http://localhost:8000 (or your server's IP address).
+2. Enter your program idea in the provided form.
+3. Submit the form to receive generated questions based on your idea.
 
-### response_script.js
+## Configuration
 
-Клиентский JavaScript, обрабатывающий отправку формы и получение ответа от сервера.
+1. Flask server runs on 127.0.0.1:5000 inside the container.
+2. Nginx listens on port 8000 and forwards requests to the Flask application.
+3. Static files are served from the /server/static/ directory.
+4. CORS is configured to allow requests from 172.17.0.3:80.
 
-### index.html
+## Development
+To run the application locally without Docker:
 
-HTML-шаблон главной страницы с формой для ввода описания идеи.
+1. Start the Flask server using Server.py.
+2. The server will be accessible at http://127.0.0.1:5000.
 
-## Функциональность
-
-- [x] Базовый веб-сервер на Flask
-- [x] Клиентский скрипт для отправки запросов
-- [x] HTML-шаблон главной страницы
-- [ ] Полная интеграция между компонентами
-- [ ] Реализация генерации вопросов на сервере
-
-## Технологический стек
-
-- Python 3.x
-- Flask
-- JavaScript
-- HTML
-
-## Начало работы
-
-1. Клонируйте репозиторий
-2. Установите зависимости: pip install flask
-3. Запустите сервер: python Server.py
-
-## Использование
-
-Откройте браузер и перейдите по адресу `http://127.0.0.1:5000`. Вы увидите форму для ввода описания идеи программы.
-
-## План развития
-
-- Реализация API endpoint для генерации вопросов
-- Интеграция с моделью генерации вопросов
-- Улучшение пользовательского интерфейса
-- Добавление функции обратной связи
-
-## Вклад в проект
-
-Мы приветствуем вклад в развитие проекта! Пожалуйста, создавайте issue или pull request для предложений и улучшений.
-
-## Лицензия
-
-Этот проект распространяется под лицензией MIT. Подробности смотрите в файле LICENSE.
+```
+graph TD
+    A[Client Browser] -->|HTTP Request| B[Nginx :8000]
+    B -->|Proxy to :5000| C[Flask Server]
+    C -->|Serve| D[index.html]
+    D -->|Load| E[response_script.js]
+    E -->|API Call| F[/critiq/api/generate-reply]
+    F -->|Proxy to :8000| B
+    B -->|Forward to Flask| C
+    C -->|Process Request| G[Generate Questions]
+    G -->|Return Response| C
+    C -->|JSON Response| B
+```
+    B -->|HTTP Response| A
