@@ -32,6 +32,9 @@ Brief description of your project.
 ## Development
 To run the application locally without Docker:
 
+1. Start the Flask server using Server.py.
+2. The server will be accessible at http://127.0.0.1:5000.
+
 ## Start the Flask server using Server.py.
 The server will be accessible at http://127.0.0.1:5000.
 
