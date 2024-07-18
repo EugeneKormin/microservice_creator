@@ -1,76 +1,33 @@
-# Project Review Simulation
+# Critiq
 
-## Обзор проекта
+Brief description of your project.
 
-Этот проект представляет собой систему для симуляции обзора проектов и генерации вопросов на основе описания идеи. Он включает в себя компоненты для работы с OpenAI API, конфигурационный модуль и веб-сервер.
+# Project Structure
 
-**Важно: Проект находится в активной разработке. Функциональность не гарантируется и может измениться.**
+ConfigReader.py: Reads configuration from config.ini file.
+Project_review_simulation.py: Implements a project review simulation using OpenAI's GPT-3.5 model.
+Server.py: Flask server that handles API requests for generating replies.
+Dockerfile: Defines the Docker image for the application.
+nginx.conf: Nginx configuration for reverse proxying and CORS handling.
 
+# Setup and Installation
 
-## Компоненты
+Clone the repository and navigate to the project directory.
+Create a config.ini file in the project root with your OpenAI API key.
+Install the required Python packages using the requirements.txt file.
+Build the Docker image.
+Run the Docker container, mapping port 8000.
 
-### ConfigReader.py
+# Usage
+The application exposes an API endpoint at /api/generate-reply. Send POST requests to this endpoint with a JSON payload containing an ideaDescription field. The server will respond with generated questions based on the input.
+Configuration
 
-Модуль для чтения конфигурационных данных из файла `config.ini`, в частности, API ключа для ChatGPT 3.5.
+The application uses a SOCKS5 proxy for API requests. Modify proxy settings in Project_review_simulation.py.
+Nginx listens on port 8000 and forwards requests to the Flask application on port 5000.
+CORS is configured to allow requests from 172.17.0.2:80. Adjust in nginx.conf if needed.
 
-### Project_review_simulation.py
+# Development
+To run the application locally without Docker:
 
-Основной класс `ProjectReviewSimulation`, который использует OpenAI API для генерации детального обзора проекта на основе его описания.
-
-### Server.py
-
-Flask-сервер, предоставляющий API endpoint для генерации вопросов на основе описания идеи.
-
-## Функциональность
-
-- [x] Чтение конфигурационных данных
-- [x] Интеграция с OpenAI API
-- [x] Генерация детального обзора проекта
-- [x] Веб-сервер для обработки запросов
-- [ ] Полная интеграция между компонентами
-
-## Технологический стек
-
-- Python 3.x
-- Flask
-- OpenAI API
-- Langchain
-- ConfigParser
-
-## Начало работы
-
-1. Клонируйте репозиторий
-2. Установите зависимости: pip install flask openai langchain configparser
-3. Создайте файл `config.ini` и добавьте свой API ключ:
-[API_KEY]
-CHATGPT3_5 = ваш_api_ключ
-4. Запустите сервер: python Server.py
-
-## Использование
-
-### API эндпоинт
-
-- POST `/api/generate-reply`: Генерация вопросов на основе описания идеи
-
-### Пример запроса
-
-```python
-import requests
-
-url = "http://127.0.0.1:5000/api/generate-reply"
-data = {"ideaDescription": "I want to build a website for a small business."}
-response = requests.post(url, json=data)
-print(response.json())
-```
-
-## План развития
-
-Интеграция генерации вопросов с ProjectReviewSimulation
-Улучшение обработки ошибок и валидации входных данных
-Добавление аутентификации для API
-Расширение функциональности веб-сервера
-
-## Вклад в проект
-Мы приветствуем вклад в развитие проекта! Пожалуйста, создавайте issue или pull request для предложений и улучшений.
-## Лицензия
-Этот проект распространяется под лицензией MIT. Подробности смотрите в файле LICENSE.
+# Start the Flask server using Server.py.
+The server will be accessible at http://127.0.0.1:5000.
