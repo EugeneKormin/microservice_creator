@@ -35,7 +35,7 @@ To run the application locally without Docker:
 1. Start the Flask server using Server.py.
 2. The server will be accessible at http://127.0.0.1:5000.
 
-```
+
 graph TD
     A[Client Browser] -->|HTTP Request| B[Nginx :8000]
     B -->|Proxy to :5000| C[Flask Server]
@@ -47,5 +47,5 @@ graph TD
     C -->|Process Request| G[Generate Questions]
     G -->|Return Response| C
     C -->|JSON Response| B
-```
     B -->|HTTP Response| A
+
