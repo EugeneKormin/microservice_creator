@@ -1,9 +1,10 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import status, FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 import jwt
+from pydantic import BaseModel
 
 from app.database import SessionLocal, engine, Base
 from app.models.user import User, UserCreate
@@ -31,8 +32,27 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 # OAuth2 scheme
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-# Registration endpoint
-# Registration endpoint
+# Get current user
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+        token_data = TokenData(username=username)
+    except JWTError:
+        raise credentials_exception
+    user = db.query(User).filter(User.username == token_data.username).first()
+    if user is None:
+        raise credentials_exception
+    return user
+
+
 # Registration endpoint
 @app.post("/register")
 def register(user: UserCreate, db: Session = Depends(get_db)):
@@ -42,19 +62,20 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Username already registered")
 
     # Hash the password
-    hashed_password = pwd_context.hash(user.password_hash)
+    hashed_password = pwd_context.hash(user.password)
 
     # Create user
     db_user = User(
         username=user.username,
         email=user.email,
-        password_hash=hashed_password
+        password_hash=hashed_password,
+        role=user.role
     )
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
 
-    return {"message": "User registered successfully"}
+    return {"message": "User registered successfully", "role": db_user.role}
 
 
 # Login endpoint
@@ -84,6 +105,10 @@ def read_users(db: Session = Depends(get_db)):
     users = db.query(User).all()
     return users
 
+# Current user endpoint
+@app.get("/users/me")
+def read_current_user(current_user: User = Depends(get_current_user)):
+    return current_user
 
 # JWT token creation
 def create_access_token(data: dict, expires_delta: timedelta = None):
@@ -95,3 +120,16 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+
+# Token data model
+class TokenData(BaseModel):
+    username: str
+
+
+# JWT error
+class JWTError(Exception):
+    pass
+
+
+
