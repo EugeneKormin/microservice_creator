@@ -2,10 +2,10 @@
 FROM python:3.8-slim-buster
 
 # Set the working directory in the container
-WORKDIR /server
+WORKDIR /frontend
 
 # Copy the current directory contents into the container at /app
-COPY . /server
+COPY . /frontend
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
@@ -26,8 +26,8 @@ EXPOSE 8000
 ENV NAME=Frontend
 
 # Create a script to run both Nginx and your Python app
-RUN echo '#!/bin/bash\nnginx\npython Server.py' > /server/start.sh
-RUN chmod +x /server/start.sh
+RUN echo '#!/bin/bash\nnginx\npython Server.py' > /frontend/start.sh
+RUN chmod +x /frontend/start.sh
 
 # Run the start script when the container launches
-CMD ["/server/start.sh"]
+CMD ["/frontend/start.sh"]

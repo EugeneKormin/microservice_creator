@@ -1,27 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>Program Generation System</title>
-        <script src="/static/response_script.js"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Program Idea Generator</title>
     </head>
     <body>
-        <h1>Submit Your Program Idea</h1>
-        <form id="programIdeaForm">
-            <label for="ideaDescription">Idea Description:</label><br>
-            <textarea id="ideaDescription" name="ideaDescription" rows="4" cols="50"></textarea><br>
-            <input type="submit" value="Submit">
-        </form>
-
-        <h2>Generated Questions</h2>
-        <div id="generatedCodeContainer">
-            <!-- The generated questions will be inserted here by the JavaScript code -->
+        <div id="loginContainer">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="text" id="loginUsername" placeholder="Username" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <button id="gmailLoginButton">Login with Gmail</button>
         </div>
 
-        <h2>Feedback</h2>
-        <form id="feedbackForm">
-            <label for="feedback">Your Feedback:</label><br>
-            <textarea id="feedback" name="feedback" rows="4" cols="50"></textarea><br>
-            <input type="submit" value="Submit Feedback">
-        </form>
+        <div id="registerContainer">
+            <h2>Register</h2>
+            <form id="registerForm">
+                <input type="text" id="registerUsername" placeholder="Username" required>
+                <input type="email" id="registerEmail" placeholder="Email" required>
+                <input type="password" id="registerPassword" placeholder="Password" required>
+                <select id="registerRole" required>
+                    <option value="trial">Trial</option>
+                    <option value="vip">VIP</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+
+        <div id="userGreetingContainer" style="display:none;">
+            <h2>Welcome, <span id="userName"></span>!</h2>
+            <p>Your role: <span id="userRole"></span></p>
+            <button id="logoutButton">Logout</button>
+        </div>
+
+        <div id="programIdeaContainer">
+            <h2>Generate Program Idea</h2>
+            <form id="programIdeaForm">
+                <textarea id="ideaDescription" placeholder="Describe your program idea" required></textarea>
+                <button type="submit">Generate</button>
+            </form>
+        </div>
+
+        <div id="generatedCodeContainer"></div>
+
+        <button id="viewHistoryButton" style="display:none;">View History</button>
+
+        <script src="response_script.js"></script>
     </body>
 </html>
